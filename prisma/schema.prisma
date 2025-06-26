@@ -24,6 +24,7 @@ model User {
   registration_date DateTime @default(now())
   account_status  AccountStatus @default(Pendiente)
   address         Address[]
+  services        UserService[]
   @@map("users")
 }
 
@@ -67,4 +68,36 @@ enum AccountStatus {
   Pendiente
   Activo
   Inactivo
+}
+
+model UserService {
+  id              Int       @id @default(autoincrement())
+  user_id Int @map("user_id")
+  alias           String
+  numero_servicio String @unique
+  servicio        ServiceType
+  user         User    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  pagos           PagoUser[]
+
+
+  @@map("users-servies")
+}
+
+model PagoUser {
+  id             Int       @id @default(autoincrement())
+  id_service     Int       @map("servicio_id")
+  monto          Float
+  pagado         Boolean
+  fecha_servicio DateTime
+  fecha_cobro    DateTime @default(now())
+
+  userService    UserService @relation(fields: [id_service], references: [id])
+
+  @@map("pagos-users")
+}
+
+enum ServiceType {
+  CFE
+  CONAGUA
+  BASURA
 }

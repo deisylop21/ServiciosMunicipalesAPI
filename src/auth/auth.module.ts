@@ -1,4 +1,3 @@
-// src/auth/auth.module.ts
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PrismaClient } from '@prisma/client';
@@ -39,4 +38,3 @@ import { JwtService } from './infraestructure/services/jwt.service';
   exports: [RegisterUserUseCase, LoginUserUseCase],
 })
 export class AuthModule {}
-

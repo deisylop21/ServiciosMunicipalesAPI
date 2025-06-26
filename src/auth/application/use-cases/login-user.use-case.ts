@@ -1,4 +1,3 @@
-// src/auth/application/use-cases/login-user.use-case.ts
 import { LoginUserDto } from '../dtos/login-user.dto';
 import { IUserRepository } from '../../domain/interfaces/user.repository';
 import { UserEntity } from '../../domain/entities/user.entity';
@@ -14,7 +13,6 @@ export class LoginUserUseCase {
   async execute(dto: LoginUserDto): Promise<{ user: UserEntity; accessToken: string }> {
     const { emailOrUsername, password } = dto;
 
-    // Buscar usuario por email o username
     let user = await this.userRepository.findByEmail(emailOrUsername);
     if (!user) {
       user = await this.userRepository.findByUsername(emailOrUsername);
