@@ -1,14 +1,15 @@
 import { PrismaClient } from '@prisma/client';
 import { IUserRepository } from '../../domain/interfaces/user.repository';
 import { UserEntity, UserType, AccountStatus } from '../../domain/entities/user.entity';
+import { AddressEntity} from '../../domain/entities/address.entity'
 
 export class UserRepository implements IUserRepository {
   constructor(private readonly prisma: PrismaClient) {}
 
-  async createUser(user: UserEntity): Promise<UserEntity> {
+  async createUser(user: UserEntity, address: AddressEntity): Promise<UserEntity> {
     const created = await this.prisma.user.create({
       data: {
-        type: user.type,
+        type: UserType.ciudadano,
         names: user.names,
         father_lastname: user.father_lastname,
         mother_lastname: user.mother_lastname,
@@ -22,25 +23,43 @@ export class UserRepository implements IUserRepository {
         profile_picture: user.profile_picture ?? null,
         registration_date: user.registration_date,
         account_status: user.account_status,
+        address: {
+          create: {
+            calle: address.calle,
+            cp: address.cp,
+            referencia: address.referencia ?? null,
+            comisaria: {
+              connect: { id: Number(address.comisaria_id),
+              },
+            },
+            colonia: {
+              connect: { id: Number(address.colonia_id),
+              },
+            },
+          },
+        },
+      },
+      include: {
+        address: true,
       },
     });
 
     return new UserEntity(
-      created.user_id,
-      created.type as UserType,
-      created.names,
-      created.father_lastname,
-      created.mother_lastname,
-      created.email,
-      created.password,
-      created.username,
-      created.birth_date ?? null,
-      created.phone ?? null,
-      created.recovery_token ?? null,
-      created.token_exp ?? null,
-      created.profile_picture ?? null,
-      created.registration_date,
-      created.account_status as AccountStatus,
+        created.user_id,
+        created.type as UserType,
+        created.names,
+        created.father_lastname,
+        created.mother_lastname,
+        created.email,
+        created.password,
+        created.username,
+        created.birth_date ?? null,
+        created.phone ?? null,
+        created.recovery_token ?? null,
+        created.token_exp ?? null,
+        created.profile_picture ?? null,
+        created.registration_date,
+        created.account_status as AccountStatus,
     );
   }
 
@@ -49,21 +68,21 @@ export class UserRepository implements IUserRepository {
     if (!user) return null;
 
     return new UserEntity(
-      user.user_id,
-      user.type as UserType,
-      user.names,
-      user.father_lastname,
-      user.mother_lastname,
-      user.email,
-      user.password,
-      user.username,
-      user.birth_date ?? null,
-      user.phone ?? null,
-      user.recovery_token ?? null,
-      user.token_exp ?? null,
-      user.profile_picture ?? null,
-      user.registration_date,
-      user.account_status as AccountStatus,
+        user.user_id,
+        user.type as UserType,
+        user.names,
+        user.father_lastname,
+        user.mother_lastname,
+        user.email,
+        user.password,
+        user.username,
+        user.birth_date ?? null,
+        user.phone ?? null,
+        user.recovery_token ?? null,
+        user.token_exp ?? null,
+        user.profile_picture ?? null,
+        user.registration_date,
+        user.account_status as AccountStatus,
     );
   }
 
@@ -72,21 +91,21 @@ export class UserRepository implements IUserRepository {
     if (!user) return null;
 
     return new UserEntity(
-      user.user_id,
-      user.type as UserType,
-      user.names,
-      user.father_lastname,
-      user.mother_lastname,
-      user.email,
-      user.password,
-      user.username,
-      user.birth_date ?? null,
-      user.phone ?? null,
-      user.recovery_token ?? null,
-      user.token_exp ?? null,
-      user.profile_picture ?? null,
-      user.registration_date,
-      user.account_status as AccountStatus,
+        user.user_id,
+        user.type as UserType,
+        user.names,
+        user.father_lastname,
+        user.mother_lastname,
+        user.email,
+        user.password,
+        user.username,
+        user.birth_date ?? null,
+        user.phone ?? null,
+        user.recovery_token ?? null,
+        user.token_exp ?? null,
+        user.profile_picture ?? null,
+        user.registration_date,
+        user.account_status as AccountStatus,
     );
   }
 }

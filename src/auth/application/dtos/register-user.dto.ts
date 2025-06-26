@@ -6,9 +6,6 @@ export enum UserType {
 }
 
 export class RegisterUserDto {
-  @IsEnum(UserType)
-  type: UserType;
-
   @IsString()
   @IsNotEmpty()
   names: string;
@@ -39,4 +36,24 @@ export class RegisterUserDto {
   @IsString()
   @Length(10, 10)
   phone?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  comisaria: number;
+
+  @IsString()
+  @IsNotEmpty()
+  colonia: number;
+
+  @IsString()
+  @IsNotEmpty()
+  calle: string;
+
+  @IsString()
+  @Length(5, 5)
+  cp: string;
+
+  @IsOptional()
+  @IsString()
+  referencia?: string;
 }

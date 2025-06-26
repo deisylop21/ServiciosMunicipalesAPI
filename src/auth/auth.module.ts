@@ -39,3 +39,4 @@ import { JwtService } from './infraestructure/services/jwt.service';
   exports: [RegisterUserUseCase, LoginUserUseCase],
 })
 export class AuthModule {}
+

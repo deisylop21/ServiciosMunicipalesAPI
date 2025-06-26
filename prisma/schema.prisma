@@ -23,9 +23,40 @@ model User {
   profile_picture String?
   registration_date DateTime @default(now())
   account_status  AccountStatus @default(Pendiente)
-
+  address         Address[]
   @@map("users")
 }
+
+model Comisaria {
+    id Int @id @default(autoincrement())
+    nombre String @unique
+    addresses   Address[]
+    colonias Colonia[]
+}
+
+model Colonia {
+    id Int @id @default(autoincrement())
+    nombre String @unique
+    comisaria_id Int @map("comisaria_id")
+    comisaria    Comisaria  @relation(fields: [comisaria_id], references: [id])
+    addresses   Address[]
+}
+
+model Address {
+    address_id Int @id @default(autoincrement())
+    calle String
+    user_id Int @map("user_id")
+    comisaria_id  Int @map("comisaria_id")
+    colonia_id   Int @map("colonia_id")
+    cp String
+    referencia String?
+    user         User    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+    comisaria    Comisaria @relation(fields: [comisaria_id], references: [id])
+    colonia      Colonia   @relation(fields: [colonia_id], references: [id])
+
+    @@map("address")
+}
+
 
 enum UserType {
   administrador

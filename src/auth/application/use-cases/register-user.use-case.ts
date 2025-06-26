@@ -1,6 +1,7 @@
 import { IUserRepository } from '../../domain/interfaces/user.repository';
-import { RegisterUserDto } from '../dtos/register-user.dto';
+import {RegisterUserDto, UserType} from '../dtos/register-user.dto';
 import { UserEntity, AccountStatus } from '../../domain/entities/user.entity';
+import { AddressEntity } from '../../domain/entities/address.entity';
 import * as bcrypt from 'bcryptjs';
 
 export class RegisterUserUseCase {
@@ -19,9 +20,17 @@ export class RegisterUserUseCase {
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
 
+    const address = new AddressEntity(
+        dto.comisaria,
+        dto.colonia,
+        dto.calle,
+        dto.cp,
+        dto.referencia ?? null,
+    );
+
     const user = new UserEntity(
-      0, 
-      dto.type,
+      0,
+      UserType.ciudadano,
       dto.names,
       dto.father_lastname,
       dto.mother_lastname,
@@ -37,7 +46,7 @@ export class RegisterUserUseCase {
       AccountStatus.Pendiente,
     );
 
-    const createdUser = await this.userRepository.createUser(user);
+    const createdUser = await this.userRepository.createUser(user, address);
     return createdUser;
   }
 }

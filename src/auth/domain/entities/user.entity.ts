@@ -10,7 +10,7 @@ export enum UserType {
 }
 
 export class UserEntity {
-  constructor(
+  constructor (
     public user_id: number,
     public type: UserType,
     public names: string,
